@@ -1,0 +1,10 @@
+# ignorar diretórios
+/env-catholic
+/__pycache__
+
+# ignorar arquivos
+set_envs.txt
+teste.ipynb
+*.pyc
+*.png
+*.jpg
