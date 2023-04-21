@@ -224,11 +224,11 @@ def liturgia_diaria():
     send_telegram("Santo(a) do dia: {}".format(nome_santo), chatid)
     
     # obtendo imagem do santo do dia
-    url_img = dados_html.find('img', class_='wp-image-10488 size-full').get('src')
-    url_img_santo = requests.get(url_img).content
+    # url_img = dados_html.find('img', class_='wp-image-10488 size-full').get('src')
+    # url_img_santo = requests.get(url_img).content
     
     # enviando imagem do santo do dia
-    send_telegram_img(url_img_santo, chatid)
+    # send_telegram_img(url_img_santo, chatid)
     
     # obtendo resumo do santo do dia por chatGPT
     quem_foi = who_was(nome_santo_msg)
