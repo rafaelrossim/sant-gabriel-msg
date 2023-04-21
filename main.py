@@ -236,7 +236,7 @@ def liturgia_diaria():
     # enviando resumo do santo do dia
     send_telegram("{}\n {}, rogai por nós!".format(quem_foi, nome_santo_msg), chatid)
     
-    return r
+    return "Liturgia diária realizada com sucesso", 200
 
 
 # execução de script
