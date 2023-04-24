@@ -8,8 +8,8 @@ import requests, os, urllib.request, re, datetime, openai
 from app import app
 from bs4 import BeautifulSoup
 
-# chatid = os.getenv("chatid_group") # chat do grupo
-chatid = os.getenv("chatid_bot") # BOT
+chatid = os.getenv("chatid_group") # chat do grupo
+# chatid = os.getenv("chatid_bot") # BOT
 apiToken_telegram = os.getenv("token_tlg")
 apiToken_openai = os.getenv("token_openai")
 
