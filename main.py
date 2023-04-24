@@ -3,12 +3,13 @@
 # https://api.telegram.org/bot{your_chatid}/getUpdates
 
 # import libs
+from flask import jsonify
 import requests, os, urllib.request, re, datetime, openai
 from app import app
 from bs4 import BeautifulSoup
 
-chatid = os.getenv("chatid_group") # chat do grupo
-# chatid = os.getenv("chatid_bot") # BOT
+# chatid = os.getenv("chatid_group") # chat do grupo
+chatid = os.getenv("chatid_bot") # BOT
 apiToken_telegram = os.getenv("token_tlg")
 apiToken_openai = os.getenv("token_openai")
 
@@ -29,23 +30,23 @@ def send_telegram(message, chatid):
         print(e)
 
 
-def send_telegram_img(ulr_img, chatid):
-    """Função que reaiza o envio de imagens, utilizando a API Telegram
-
-    Args:
-        ulr_img (str): URL da imagem a ser enviada
-        chatid (str): ChatID do contato ou grupo desejado a receber a mensagem
-    """
-
-    apiURL = f'https://api.telegram.org/bot{apiToken_telegram}/sendPhoto'
-    
-    with open("santo.jpg", "wb") as f:
-        f.write(ulr_img)
-    
-    try:
-        requests.post(apiURL, files={'photo': open("santo.jpg", 'rb')}, data={'chat_id': chatid})
-    except Exception as e:
-        print(e)
+# def send_telegram_img(ulr_img, chatid):
+#     """Função que reaiza o envio de imagens, utilizando a API Telegram
+# 
+#     Args:
+#         ulr_img (str): URL da imagem a ser enviada
+#         chatid (str): ChatID do contato ou grupo desejado a receber a mensagem
+#     """
+# 
+#     apiURL = f'https://api.telegram.org/bot{apiToken_telegram}/sendPhoto'
+#     
+#     with open("santo.jpg", "wb") as f:
+#         f.write(ulr_img)
+#         
+#     try:
+#         requests.post(apiURL, files={'photo': open("santo.jpg", 'rb')}, data={'chat_id': chatid})
+#     except Exception as e:
+#         print(e)
 
 
 def search_youtube(palavra_chave: str):
@@ -99,8 +100,8 @@ def who_was(nome):
     response = openai.Completion.create(
         model="text-davinci-003",
         prompt="quem foi {}".format(nome),
-        temperature=0.7,
-        max_tokens=256,
+        temperature=0.1,
+        max_tokens=1000,
         top_p=1,
         frequency_penalty=0,
         presence_penalty=0
@@ -138,7 +139,7 @@ def liturgia_diaria():
     json_primeiraLeitura_referencia = r['primeiraLeitura']['referencia']
     
     # enviando dados da primeira leitura
-    send_telegram("Primeira leitura:\n\n {} ({})\n\n {}\n\n".format(
+    send_telegram("Primeira leitura:\n\n {} ({})\n\n {}\n\n Palavra do Senhor. Graças a Deus.".format(
         json_primeiraLeitura_titulo, 
         json_primeiraLeitura_referencia, 
         json_primeiraLeitura_texto), 
@@ -167,7 +168,7 @@ def liturgia_diaria():
         json_segundaLeitura_referencia = r['segundaLeitura']['referencia']
         
         # enviando dados da segunda leitura
-        send_telegram("Segunda leitura:\n\n {} ({})\n\n {}\n\n".format(
+        send_telegram("Segunda leitura:\n\n {} ({})\n\n {}\n\n Palavra do Senhor. Graças a Deus.".format(
             json_segundaLeitura_titulo, 
             json_segundaLeitura_referencia, 
             json_segundaLeitura_texto), 
@@ -180,7 +181,7 @@ def liturgia_diaria():
     json_evangelho_referencia = r['evangelho']['referencia']
     
     # enviando dados do evangelho
-    send_telegram("Evangelho:\n\n {} ({})\n\n {}\n\n".format(
+    send_telegram("Evangelho:\n\n {} ({})\n\n {}\n\n Palavra da Salvação. Glória a vós, Senhor.".format(
         json_evangelho_titulo, 
         json_evangelho_referencia, 
         json_evangelho_texto), 
@@ -236,8 +237,7 @@ def liturgia_diaria():
     # enviando resumo do santo do dia
     send_telegram("{}\n {}, rogai por nós!".format(quem_foi, nome_santo_msg), chatid)
     
-    return "Liturgia diária realizada com sucesso", 200
-
+    return jsonify(msg = "Liturgia enviada com sucesso!"), 200
 
 # execução de script
 if __name__ == "__main__":
