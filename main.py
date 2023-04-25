@@ -189,8 +189,8 @@ def liturgia_diaria():
     )
     
     # obtendo video da homilia diária
-    video_yt_homolia = search_youtube("homilia+diaria+padre+paulo+ricardo+hoje")
-    send_telegram("Homilia de hoje:\n\n {}".format(video_yt_homolia), chatid)
+    video_yt_homilia = search_youtube("homilia+diaria+padre+paulo+ricardo+hoje")
+    send_telegram("Homilia de hoje:\n\n {}".format(video_yt_homilia), chatid)
     
     # obtendo data de hoje e converter a data em formato de dia da semana
     data_hoje = datetime.datetime.now()
@@ -199,7 +199,7 @@ def liturgia_diaria():
     # criando dict para fazer tradução da semana em português
     dias_da_semana = {
     "Monday": "segundafeira", 
-    "Tuesday": "terçafeira", 
+    "Tuesday": "tercafeira",
     "Wednesday": "quartafeira", 
     "Thursday": "quintafeira", 
     "Friday": "sextafeira", 
