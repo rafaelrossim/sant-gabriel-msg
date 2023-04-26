@@ -262,9 +262,11 @@ def liturgia_horas():
     # hora atual com timezone
     now_tmz = now.time()
     
+    now_tmz =  datetime.time(21, 0)
+    
     # verificando a hora atual para enviar o ofício das horas
     if now_tmz >= datetime.time(0, 0) and now_tmz < datetime.time(6, 0):
-        liturgia_horas = """Liturgia das horas (Matinas)\n\n
+        liturgia_horas = """Liturgia das horas (Matinas):\n
         Agora, lábios meus, dizei e anunciai os grandes louvores da Virgem Mãe de Deus. 
          Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor.
          Glória seja ao Pai, ao Filho e ao Amor também, que é um só Deus em Pessoas três, 
@@ -290,11 +292,24 @@ def liturgia_horas():
         """
     
     elif now_tmz >= datetime.time(6, 0) and now_tmz < datetime.time(9, 0):
-        liturgia_horas = """Liturgia das horas (Prima)\n\n
+        liturgia_horas = """Oferecimento do Dia:\n
+        Ofereço-vos, ó meu Deus, em união com o Santíssimo Coração de Jesus e por meio do Imaculado Coração de Maria, 
+         as orações, obras, sofrimentos e alegrias deste dia, em reparação de nossas ofensas 
+         e por todas as inten- ções pelas quais o Divino Coração está, continuamente, intercedendo em nosso favor.
+         Eu Vos ofereço, de modo particular, pelas intenções do nosso Santo Padre, o Papa e por toda a Igreja. Amém.\n\n
+        
+        Oração da Manhã:\n
+        Senhor, meu Deus, no silêncio deste dia que amanhece, venho pedir-Te paz, sabedoria e força. H
+         oje quero olhar o mundo com os olhos cheios de amor; ser paciente, compreensivo, humilde, suave e bondoso. 
+         Quero ver todos os teus filhos além das aparências, como Tu mesmo os vês, e assim não olhar senão ao bem de cada um.
+         Fecha meus ouvidos a toda murmuração; guarda a minha língua de toda maledicência, e que só de amor se encha a minha vida. 
+         Quero ser bem-in- tencionado e justo; e que todos aqueles que se aproximarem de mim, sintam a Tua presença. 
+         Senhor, reveste-me da tua bondade e que, no decorrer deste dia, eu Te revele a todos. Amém.\n\n
+        
+        Liturgia das horas (Prima):\n
         Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor. 
          Glória seja ao Pai, ao Filho e ao Amor também, que é um só Deus em Pessoas três, 
          agora e sempre, e sem fim. Amém.\n\n
-        
         
         Hino:\n
         Deus Vos salve, mesa para Deus ornada, coluna sagrada, de grande firme- za; 
@@ -315,7 +330,7 @@ def liturgia_horas():
         """
         
     elif now_tmz >= datetime.time(9, 0) and now_tmz < datetime.time(12, 0):
-        liturgia_horas = """Liturgia das horas (Terça)\n\n
+        liturgia_horas = """Liturgia das horas (Terça):\n
         Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor.
          Glória seja ao Pai, ao Filho e ao Amor também, que é um só Deus em Pessoas três, agora e sempre, e sem fim. Amém.\n\n
         
@@ -338,7 +353,7 @@ def liturgia_horas():
         """
         
     elif now_tmz >= datetime.time(12, 0) and now_tmz < datetime.time(15, 0):
-        liturgia_horas = """Liturgia das horas (Sexta)\n\n
+        liturgia_horas = """Liturgia das horas (Sexta):\n
         Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor. 
          Glória seja ao Pai, ao Filho e ao Amor também, que é um só Deus em Pessoas três, agora e sempre, e sem fim. Amém.\n\n
         
@@ -360,7 +375,7 @@ def liturgia_horas():
         """
         
     elif now_tmz >= datetime.time(15, 0) and now_tmz < datetime.time(18, 0):
-        liturgia_horas = """Liturgia das horas (Noa)\n\n
+        liturgia_horas = """Liturgia das horas (Noa):\n
         Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor. 
          Glória seja ao Pai, ao Filho e ao Amor também, que é um só Deus em Pessoas três, agora e sempre, e sem fim. Amém.\n\n
         
@@ -383,8 +398,7 @@ def liturgia_horas():
         """
         
     elif now_tmz >= datetime.time(18, 0) and now_tmz < datetime.time(21, 0):
-        liturgia_horas = """
-        Liturgia das horas (Vesperas)\n\n
+        liturgia_horas = """Liturgia das horas (Vesperas):\n
         Sede em meu favor. Virgem soberana, livrai-me do inimigo com o Vosso valor.
          Glória seja ao Pai, ao Filho e ao Amor também, que é um só Deus em Pessoas três,
          agora e sempre, e sem fim. Amém.\n\n
@@ -410,7 +424,14 @@ def liturgia_horas():
         """
         
     else:
-        liturgia_horas = """Liturgia das horas (Completas)\n\n
+        liturgia_horas = """Oração da Noite:\n
+        Meu Deus e meu Senhor, obrigado por mais um dia de vida! Eu vos agrade- ço todo bem que me concedestes praticar, 
+         e vos suplico perdão e miseri- córdia pelo mal que cometi, em pensamentos, palavras, obras e omissões. 
+         Em vossas mãos eu entrego a minha vida e meus trabalhos, ó meu bom Pai! E enquanto eu estiver dormindo, 
+         guardai-me na vossa paz e no vosso amor! Abençoai, ó bom Jesus, esta casa, este lar, 
+         e que todos estejamos sempre de coração aberto para receber a vossa divina graça. Amém.\n\n
+        
+        Liturgia das horas (Completas):\n
         Rogai a Deus, Vós, Virgem, nos converta, que a Sua ira se aparte de nós. Sede em meu favor, Virgem soberana, 
          livrai-me do inimigo com o Vosso valor. Glória seja ao Pai, ao Filho e ao Amor também, 
          que é um só Deus em Pessoas três, agora e sempre, e sem fim. Amém.\n\n
