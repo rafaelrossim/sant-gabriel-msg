@@ -4,7 +4,7 @@
 
 
 # importando libs
-import requests, os, urllib.request, re, datetime, openai
+import requests, os, urllib.request, re, datetime, openai, pytz
 from app import app
 from bs4 import BeautifulSoup
 from flask import jsonify
@@ -248,6 +248,203 @@ def liturgia_diaria():
     
     return jsonify(msg = "Liturgia enviada com sucesso!"), 200
 
+
+@app.route('/liturgia_horas/', methods=['GET'])
+def liturgia_horas():
+    """Função que realiza o envio do liturgia das horas"""
+    
+    # Obter o timezone do Brasil
+    timezone = pytz.timezone('Brazil/East')
+
+    # Obter a hora atual com o timezone do Brasil
+    now = datetime.datetime.now(timezone)
+    
+    # hora atual com timezone
+    now_tmz = now.time()
+    
+    # verificando a hora atual para enviar o ofício das horas
+    if now_tmz >= datetime.time(0, 0) and now_tmz < datetime.time(6, 0):
+        liturgia_horas = """Liturgia das horas (Matinas)\n\n
+        Agora, lábios meus, dizei e anunciai os grandes louvores da Virgem Mãe de Deus. 
+         Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor.
+         Glória seja ao Pai, ao Filho e ao Amor também, que é um só Deus em Pessoas três, 
+         agora e sempre, e sem fim. Amém.\n\n
+        
+        Hino:\n
+        Deus Vos salve, Virgem, Senhora do mundo, Rainha dos céus e das virgens, Virgem. 
+         Estrela da manhã, Deus Vos salve, cheia de graça divina, formosa e louçã. 
+         Daí pressa Senhora, em favor do mundo, pois Vos reconhece como defensora. 
+         Deus Vos nomeou desde a eternidade, para a Mãe do Verbo, com o qual criou terra, mar e céus. 
+         E Vos escolheu, quando Adão pecou, por esposa de Deus. Deus Vos escolheu, 
+         e já muito antes, em Seu tabernáculo morada lhe deu.\n\n
+        
+        Ouvi, Mãe de Deus, minha oração. Toque em Vosso peito os clamores meus.\n\n
+        
+        Oração:\n
+        Santa Maria, Rainha dos céus, Mãe de Nosso Senhor Jesus Cristo, Senhora do mundo, 
+         que a nenhum pecador desamparais e nem desprezais; ponde, Senhora, 
+         em mim os olhos de Vossa piedade e alcançai-me de Vosso amado Filho o perdão de todos os meus pecados, 
+         para que eu, que agora venero com devoção, Vossa Santa e Imaculada Conceição, 
+         mereça na outra vida alcançar o prêmio da bem-aventurança, pelo merecimento do Vosso bendi- to filho, 
+         Jesus Cristo, Nosso Senhor, que com o Pai e o Espírito Santo vive e reina para sempre. Amém.\n\n
+        """
+    
+    elif now_tmz >= datetime.time(6, 0) and now_tmz < datetime.time(9, 0):
+        liturgia_horas = """Liturgia das horas (Prima)\n\n
+        Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor. 
+         Glória seja ao Pai, ao Filho e ao Amor também, que é um só Deus em Pessoas três, 
+         agora e sempre, e sem fim. Amém.\n\n
+        
+        
+        Hino:\n
+        Deus Vos salve, mesa para Deus ornada, coluna sagrada, de grande firme- za; 
+         Casa dedicada a Deus sempiterno, sempre preservada Virgem do pecado. Antes que nascida, 
+         foste, Virgem Santa, no ventre ditoso de Ana concebida. Sois Mãe criadora dos mortais viventes. 
+         Sois dos santos porta dos anjos Senhora. Sois forte esquadrão contra o inimigo, Estrela de Jacó, refúgio do cristão. 
+         A Virgem criou Deus no Espírito Santo, e todas as suas obras, com Ela as ornou.\n\n
+        
+        Ouvi, Mãe de Deus, minha oração. Toque em Vosso peito os clamores meus.\n\n
+        
+        Oração:\n
+        Santa Maria, Rainha dos céus, Mãe de Nosso Senhor Jesus Cristo, Senhora do mundo, 
+         que a nenhum pecador desamparais e nem desprezais; ponde, Senhora, 
+         em mim os olhos de Vossa piedade e alcançai-me de Vosso amado Filho o perdão de todos os meus pecados, 
+         para que eu, que agora venero com devoção, Vossa Santa e Imaculada Conceição, 
+         mereça na outra vida alcançar o prêmio da bem-aventurança, pelo merecimento do Vosso bendi- to filho, 
+         Jesus Cristo, Nosso Senhor, que com o Pai e o Espírito Santo vive e reina para sempre. Amém.\n\n
+        """
+        
+    elif now_tmz >= datetime.time(9, 0) and now_tmz < datetime.time(12, 0):
+        liturgia_horas = """Liturgia das horas (Terça)\n\n
+        Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor.
+         Glória seja ao Pai, ao Filho e ao Amor também, que é um só Deus em Pessoas três, agora e sempre, e sem fim. Amém.\n\n
+        
+        Hino:\n
+        Deus Vos salve trono do grão Salomão, arca do concerto, velo de Gedeão; 
+         Íris do céu clara, sarça da visão, favo de Sansão, fluorescente vara; 
+         a qual escolheu para ser Mãe sua, e de Vós nasceu o Filho de Deus. 
+         Assim Vos livrou da culpa original, de nenhum pecado há em Vós sinal. 
+         Vós, que habi- tais lá nas alturas, e tendes Vosso Trono sobre as nuvens puras.\n\n
+        
+        Ouvi, Mãe de Deus, minha oração. Toque em Vosso peito os clamores meus.\n\n
+        
+        Oração:\n
+        Santa Maria, Rainha dos céus, Mãe de Nosso Senhor Jesus Cristo, Senhora do mundo, 
+         que a nenhum pecador desamparais e nem desprezais; ponde, 
+         Senhora, em mim os olhos de Vossa piedade e alcançai-me de Vosso amado Filho o perdão de todos os meus pecados, 
+         para que eu, que agora venero com devoção, Vossa Santa e Imaculada Conceição, 
+         mereça na outra vida alcançar o prêmio da bem-aventurança, pelo merecimento do Vosso bendi- to filho, 
+         Jesus Cristo, Nosso Senhor, que com o Pai e o Espírito Santo vive e reina para sempre. Amém.\n\n
+        """
+        
+    elif now_tmz >= datetime.time(12, 0) and now_tmz < datetime.time(15, 0):
+        liturgia_horas = """Liturgia das horas (Sexta)\n\n
+        Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor. 
+         Glória seja ao Pai, ao Filho e ao Amor também, que é um só Deus em Pessoas três, agora e sempre, e sem fim. Amém.\n\n
+        
+        Hino:\n
+        Deus Vos salve Virgem da Trindade templo, alegria dos anjos, da pureza exemplo; 
+         que alegrais os tristes, com vossa clemência, horto de deleite, palma de paciência. Sois terra
+         bendita e sacerdotal, sois da castidade símbolo real. Cidade do Altíssimo, porta oriental; 
+         sois a mesma graça, Virgem singular. Qual lírio cheiroso, entre espinhas duras, tal sois Vós, Senhora, entre as criaturas.\n\n
+        
+        Ouvi, Mãe de Deus, minha oração. Toque em Vosso peito os clamores meus.\n\n
+        
+        Oração:\n
+        Santa Maria, Rainha dos céus, Mãe de Nosso Senhor Jesus Cristo, Senhora do mundo, 
+         que a nenhum pecador desamparais e nem desprezais; ponde, Senhora, 
+         em mim os olhos de Vossa piedade e alcançai-me de Vosso amado Filho o perdão de todos os meus pecados, 
+         para que eu, que agora venero com devoção, Vossa Santa e Imaculada Conceição, 
+         mereça na outra vida alcançar o prêmio da bem-aventurança, pelo merecimento do Vosso bendi- to filho, 
+         Jesus Cristo, Nosso Senhor, que com o Pai e o Espírito Santo vive e reina para sempre. Amém.\n\n
+        """
+        
+    elif now_tmz >= datetime.time(15, 0) and now_tmz < datetime.time(18, 0):
+        liturgia_horas = """Liturgia das horas (Noa)\n\n
+        Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor. 
+         Glória seja ao Pai, ao Filho e ao Amor também, que é um só Deus em Pessoas três, agora e sempre, e sem fim. Amém.\n\n
+        
+        Hino:\n
+        Deus Vos salve cidade de torres guarnecida, de Davi com armas bem forta- lecidas. 
+         De suma caridade sempre abrasada, do dragão à força foi por Vós prostrada. 
+         Ó mulher tão forte! Ó invicta Judite! Vós acalentastes o sumo Davi! Do Egito o curador, 
+         de Raquel nasce, do mundo o Salvador Maria no-lo deu. Toda é formosa minha companheira, 
+         n'Ela não há mácula da culpa primeira.\n\n
+        
+        Ouvi, Mãe de Deus, minha oração. Toque em Vosso peito os clamores meus.\n\n
+        
+        Oração:\n
+        Santa Maria, Rainha dos céus, Mãe de Nosso Senhor Jesus Cristo, Senhora do mundo, 
+         que a nenhum pecador desamparais e nem desprezais; ponde, Senhora, em mim os olhos de Vossa piedade 
+         e alcançai-me de Vosso amado Filho o perdão de todos os meus pecados, 
+         para que eu, que agora venero com devoção, Vossa Santa e Imaculada Conceição, 
+         mereça na outra vida alcançar o prêmio da bem-aventurança, pelo merecimento do Vosso bendi- to filho, 
+         Jesus Cristo, Nosso Senhor, que com o Pai e o Espírito Santo vive e reina para sempre. Amém.\n\n 
+        """
+        
+    elif now_tmz >= datetime.time(18, 0) and now_tmz < datetime.time(21, 0):
+        liturgia_horas = """
+        Liturgia das horas (Vesperas)\n\n
+        Sede em meu favor. Virgem soberana, livrai-me do inimigo com o Vosso valor.
+         Glória seja ao Pai, ao Filho e ao Amor também, que é um só Deus em Pessoas três,
+         agora e sempre, e sem fim. Amém.\n\n
+        
+        Hino:\n
+        Deus Vos salve, relógio, que, andando atrasado, serviu de sinal ao Verbo
+         Encarnado. Para que o homem suba às sumas alturas, desce Deus dos céus para as criaturas.
+         Com os raios claros do Sol da Justiça, Resplandece a Virgem, dando ao sol cobiça.
+         Sois lírio formoso, que cheiro respira, entre os espinhos da serpente a ira.
+         Vós aquebrantais com Vosso poder os cegos errados Vós aluminais.
+         Fizestes nascer Sol tão fecundo, e como com nuvens cobristes o mundo.\n\n
+
+        Ouvi, Mãe de Deus, minha oração. Toque em Vosso peito os clamores meus.\n\n
+
+        Oração:\n
+        Santa Maria, Rainha dos Céus, Mãe de Nosso Senhor Jesus Cristo, Senhora do mundo,
+         que a nenhum pecador desamparais e nem deseprezais; ponde, Senhora,
+         em mim os olhos de Vossa piedade e alcançai-me de Vosso amado Filho o perdão de todos os meus pecados,
+         para que agora venero com devoção, Vossa Santa e imaculada Conceição,
+         mereça na outra vida alcançar o prêmio da bem-aventurança,
+         pelo merececimento do Vosso bendito filho, Jesus Cristo, Nosso Senhor,
+         que com Pai e o Espirito Santo vive e reina para sempre. Amém.\n\n
+        """
+        
+    else:
+        liturgia_horas = """Liturgia das horas (Completas)\n\n
+        Rogai a Deus, Vós, Virgem, nos converta, que a Sua ira se aparte de nós. Sede em meu favor, Virgem soberana, 
+         livrai-me do inimigo com o Vosso valor. Glória seja ao Pai, ao Filho e ao Amor também, 
+         que é um só Deus em Pessoas três, agora e sempre, e sem fim. Amém.\n\n
+        
+        Hino:\n
+        Deus Vos salve, Virgem, Mãe Imaculada, rainha de clemência, de estrelas coroadas. Vós
+         acima os anjos sois purificada; de Deus a mão direita estás de ouro ornada. Por Vós, Mãe da graça, 
+         mereçamos ver, a Deus nas alturas, com todo o prazer. Pois sois a esperança dos pobres errantes, 
+         e seguro porto para os nave- gantes. Estrela do mar e saúde certa, e porta que estás para o céu aberta. 
+         É óleo derramado, Virgem, Vosso nome, e os Vossos servos vos hão sempre amados.\n
+
+        Ouvi, Mãe de Deus, minha oração. Toque em Vosso peito os clamores meus.\n
+
+        Oração:\n
+        Santa Maria, Rainha dos céus, Mãe de Nosso Senhor Jesus Cristo, Senhora do mundo, 
+         que a nenhum pecador desamparais e nem desprezais; ponde, Senhora, 
+         em mim os olhos de Vossa piedade e alcançai-me de Vosso amado Filho o perdão de todos os meus pecados, 
+         para que eu, que agora venero com devoção, Vossa Santa e Imaculada Conceição, 
+         mereça na outra vida alcançar o prêmio da bem-aventurança, pelo merecimento do Vosso bendi- to filho, 
+         Jesus Cristo, Nosso Senhor, que com o Pai e o Espírito Santo vive e reina para sempre. Amém.\n\n
+        
+        Oferecimento:\n
+        Humildes oferecemos a Vós, Virgem Pia, estas orações, porque, em nossa guia, 
+         vades Vós adiante e na agonia, Vós nos animeis, ó doce Virgem Maria. Amém.   
+        """
+    
+    # tratando string para remover espaços em branco
+    liturgia_horas = liturgia_horas.replace("\n        ", "")
+    
+    # send_telegram(liturgia_horas, c)
+    send_telegram(liturgia_horas, os.getenv("chatid_bot")) # enviando mensagem para o bot teste
+    
+    # retornando a liturgia das horas
+    return jsonify(msg = "Liturgia das horas enviada com sucesso!"), 200
 
 # execução de script
 if __name__ == "__main__":
