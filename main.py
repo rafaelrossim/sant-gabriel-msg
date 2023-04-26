@@ -262,8 +262,6 @@ def liturgia_horas():
     # hora atual com timezone
     now_tmz = now.time()
     
-    now_tmz =  datetime.time(21, 0)
-    
     # verificando a hora atual para enviar o ofício das horas
     if now_tmz >= datetime.time(0, 0) and now_tmz < datetime.time(6, 0):
         liturgia_horas = """Liturgia das horas (Matinas):\n
