@@ -264,7 +264,7 @@ def liturgia_horas():
     
     # verificando a hora atual para enviar o ofício das horas
     if now_tmz >= datetime.time(0, 0) and now_tmz < datetime.time(6, 0):
-        liturgia_horas = """Liturgia das horas (Matinas):\n
+        liturgia_horas = """Liturgia das horas (Matinas) - 03am:\n
         Agora, lábios meus, dizei e anunciai os grandes louvores da Virgem Mãe de Deus. 
          Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor.
          Glória seja ao Pai, ao Filho e ao Amor também, que é um só Deus em Pessoas três, 
@@ -290,7 +290,7 @@ def liturgia_horas():
         """
     
     elif now_tmz >= datetime.time(6, 0) and now_tmz < datetime.time(9, 0):
-        liturgia_horas = """Oferecimento do Dia:\n
+        liturgia_horas = """Oferecimento do Dia - 06am:\n
         Ofereço-vos, ó meu Deus, em união com o Santíssimo Coração de Jesus e por meio do Imaculado Coração de Maria, 
          as orações, obras, sofrimentos e alegrias deste dia, em reparação de nossas ofensas 
          e por todas as inten- ções pelas quais o Divino Coração está, continuamente, intercedendo em nosso favor.
@@ -328,7 +328,7 @@ def liturgia_horas():
         """
         
     elif now_tmz >= datetime.time(9, 0) and now_tmz < datetime.time(12, 0):
-        liturgia_horas = """Liturgia das horas (Terça):\n
+        liturgia_horas = """Liturgia das horas (Terça) - 09am:\n
         Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor.
          Glória seja ao Pai, ao Filho e ao Amor também, que é um só Deus em Pessoas três, agora e sempre, e sem fim. Amém.\n\n
         
@@ -351,7 +351,7 @@ def liturgia_horas():
         """
         
     elif now_tmz >= datetime.time(12, 0) and now_tmz < datetime.time(15, 0):
-        liturgia_horas = """Liturgia das horas (Sexta):\n
+        liturgia_horas = """Liturgia das horas (Sexta) - 12pm:\n
         Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor. 
          Glória seja ao Pai, ao Filho e ao Amor também, que é um só Deus em Pessoas três, agora e sempre, e sem fim. Amém.\n\n
         
@@ -373,7 +373,7 @@ def liturgia_horas():
         """
         
     elif now_tmz >= datetime.time(15, 0) and now_tmz < datetime.time(18, 0):
-        liturgia_horas = """Liturgia das horas (Noa):\n
+        liturgia_horas = """Liturgia das horas (Noa) - 03pm:\n
         Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor. 
          Glória seja ao Pai, ao Filho e ao Amor também, que é um só Deus em Pessoas três, agora e sempre, e sem fim. Amém.\n\n
         
@@ -396,7 +396,7 @@ def liturgia_horas():
         """
         
     elif now_tmz >= datetime.time(18, 0) and now_tmz < datetime.time(21, 0):
-        liturgia_horas = """Liturgia das horas (Vesperas):\n
+        liturgia_horas = """Liturgia das horas (Vesperas) - 06pm:\n
         Sede em meu favor. Virgem soberana, livrai-me do inimigo com o Vosso valor.
          Glória seja ao Pai, ao Filho e ao Amor também, que é um só Deus em Pessoas três,
          agora e sempre, e sem fim. Amém.\n\n
@@ -422,7 +422,7 @@ def liturgia_horas():
         """
         
     else:
-        liturgia_horas = """Oração da Noite:\n
+        liturgia_horas = """Oração da Noite - 09pm:\n
         Meu Deus e meu Senhor, obrigado por mais um dia de vida! Eu vos agrade- ço todo bem que me concedestes praticar, 
          e vos suplico perdão e miseri- córdia pelo mal que cometi, em pensamentos, palavras, obras e omissões. 
          Em vossas mãos eu entrego a minha vida e meus trabalhos, ó meu bom Pai! E enquanto eu estiver dormindo, 
