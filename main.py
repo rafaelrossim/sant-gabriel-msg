@@ -263,7 +263,7 @@ def liturgia_horas():
     now_tmz = now.time()
     
     # verificando a hora atual para enviar o ofício das horas
-    if now_tmz >= datetime.time(0, 0) and now_tmz < datetime.time(6, 0):
+    if now_tmz >= datetime.time(3, 0) and now_tmz < datetime.time(6, 0):
         liturgia_horas = """Liturgia das horas (Matinas) - 03am:\n
         Agora, lábios meus, dizei e anunciai os grandes louvores da Virgem Mãe de Deus. 
          Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor.
@@ -290,21 +290,28 @@ def liturgia_horas():
         """
     
     elif now_tmz >= datetime.time(6, 0) and now_tmz < datetime.time(9, 0):
-        liturgia_horas = """Oferecimento do Dia - 06am:\n
+        
+        ofercimento_dia = """Oferecimento do Dia - 06am:\n
         Ofereço-vos, ó meu Deus, em união com o Santíssimo Coração de Jesus e por meio do Imaculado Coração de Maria, 
          as orações, obras, sofrimentos e alegrias deste dia, em reparação de nossas ofensas 
          e por todas as inten- ções pelas quais o Divino Coração está, continuamente, intercedendo em nosso favor.
-         Eu Vos ofereço, de modo particular, pelas intenções do nosso Santo Padre, o Papa e por toda a Igreja. Amém.\n\n
+         Eu Vos ofereço, de modo particular, pelas intenções do nosso Santo Padre, o Papa e por toda a Igreja. Amém.\n\n"""
+    
+        ofercimento_dia = ofercimento_dia.replace("\n        ", "")
+        send_telegram(ofercimento_dia, os.getenv("chatid_bot")) # enviando mensagem para o bot teste
         
-        Oração da Manhã:\n
+        oracao_manha = """Oração da Manhã:\n
         Senhor, meu Deus, no silêncio deste dia que amanhece, venho pedir-Te paz, sabedoria e força. H
          oje quero olhar o mundo com os olhos cheios de amor; ser paciente, compreensivo, humilde, suave e bondoso. 
          Quero ver todos os teus filhos além das aparências, como Tu mesmo os vês, e assim não olhar senão ao bem de cada um.
          Fecha meus ouvidos a toda murmuração; guarda a minha língua de toda maledicência, e que só de amor se encha a minha vida. 
          Quero ser bem-in- tencionado e justo; e que todos aqueles que se aproximarem de mim, sintam a Tua presença. 
-         Senhor, reveste-me da tua bondade e que, no decorrer deste dia, eu Te revele a todos. Amém.\n\n
+         Senhor, reveste-me da tua bondade e que, no decorrer deste dia, eu Te revele a todos. Amém.\n\n"""
+         
+        oracao_manha = oracao_manha.replace("\n        ", "")
+        send_telegram(oracao_manha, os.getenv("chatid_bot")) # enviando mensagem para o bot teste
         
-        Liturgia das horas (Prima):\n
+        liturgia_horas = """Liturgia das horas (Prima):\n
         Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor. 
          Glória seja ao Pai, ao Filho e ao Amor também, que é um só Deus em Pessoas três, 
          agora e sempre, e sem fim. Amém.\n\n
@@ -372,6 +379,10 @@ def liturgia_horas():
          Jesus Cristo, Nosso Senhor, que com o Pai e o Espírito Santo vive e reina para sempre. Amém.\n\n
         """
         
+        # obtendo video da homilia diária
+        video_yt_homilia = search_youtube("homilia+diaria+padre+paulo+ricardo+hoje")
+        send_telegram("Homilia de hoje:\n\n {}".format(video_yt_homilia), os.getenv("chatid_bot"))
+        
     elif now_tmz >= datetime.time(15, 0) and now_tmz < datetime.time(18, 0):
         liturgia_horas = """Liturgia das horas (Noa) - 03pm:\n
         Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor. 
@@ -421,15 +432,19 @@ def liturgia_horas():
          que com Pai e o Espirito Santo vive e reina para sempre. Amém.\n\n
         """
         
-    else:
-        liturgia_horas = """Oração da Noite - 09pm:\n
+    elif now_tmz >= datetime.time(21, 0) and now_tmz < datetime.time(0, 0):
+        
+        oracao_noite = """Oração da Noite - 09pm:\n
         Meu Deus e meu Senhor, obrigado por mais um dia de vida! Eu vos agrade- ço todo bem que me concedestes praticar, 
          e vos suplico perdão e miseri- córdia pelo mal que cometi, em pensamentos, palavras, obras e omissões. 
          Em vossas mãos eu entrego a minha vida e meus trabalhos, ó meu bom Pai! E enquanto eu estiver dormindo, 
          guardai-me na vossa paz e no vosso amor! Abençoai, ó bom Jesus, esta casa, este lar, 
-         e que todos estejamos sempre de coração aberto para receber a vossa divina graça. Amém.\n\n
+         e que todos estejamos sempre de coração aberto para receber a vossa divina graça. Amém.\n\n"""
         
-        Liturgia das horas (Completas):\n
+        oracao_noite = oracao_noite.replace("\n        ", "")
+        send_telegram(oracao_noite, os.getenv("chatid_bot")) # enviando mensagem para o bot teste
+        
+        liturgia_horas = """Liturgia das horas (Completas):\n
         Rogai a Deus, Vós, Virgem, nos converta, que a Sua ira se aparte de nós. Sede em meu favor, Virgem soberana, 
          livrai-me do inimigo com o Vosso valor. Glória seja ao Pai, ao Filho e ao Amor também, 
          que é um só Deus em Pessoas três, agora e sempre, e sem fim. Amém.\n\n
