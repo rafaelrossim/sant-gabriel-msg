@@ -261,7 +261,7 @@ def liturgia_horas():
     
     # hora atual com timezone
     now_tmz = now.time()
-    
+
     # verificando a hora atual para enviar o ofício das horas
     if now_tmz >= datetime.time(3, 0) and now_tmz < datetime.time(6, 0):
         liturgia_horas = """Liturgia das horas (Matinas) - 03am:\n
@@ -290,7 +290,6 @@ def liturgia_horas():
         """
     
     elif now_tmz >= datetime.time(6, 0) and now_tmz < datetime.time(9, 0):
-        
         ofercimento_dia = """Oferecimento do Dia - 06am:\n
         Ofereço-vos, ó meu Deus, em união com o Santíssimo Coração de Jesus e por meio do Imaculado Coração de Maria, 
          as orações, obras, sofrimentos e alegrias deste dia, em reparação de nossas ofensas 
@@ -384,6 +383,12 @@ def liturgia_horas():
         send_telegram("Homilia de hoje:\n\n {}".format(video_yt_homilia), os.getenv("chatid_bot"))
         
     elif now_tmz >= datetime.time(15, 0) and now_tmz < datetime.time(18, 0):
+        # obtendo video do terço da misericordia
+        video_yt_terco_misericordia = search_youtube("terco+da+misericordia+Instituto+Hesed")
+        
+        # enviando vídeo do terço da misericordia
+        send_telegram("Terço da misericórdia:\n\n {}".format(video_yt_terco_misericordia), os.getenv("chatid_bot"))
+        
         liturgia_horas = """Liturgia das horas (Noa) - 03pm:\n
         Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor. 
          Glória seja ao Pai, ao Filho e ao Amor também, que é um só Deus em Pessoas três, agora e sempre, e sem fim. Amém.\n\n
@@ -432,8 +437,7 @@ def liturgia_horas():
          que com Pai e o Espirito Santo vive e reina para sempre. Amém.\n\n
         """
         
-    elif now_tmz >= datetime.time(21, 0) and now_tmz < datetime.time(0, 0):
-        
+    elif now_tmz >= datetime.time(21, 0) and now_tmz < datetime.time(23, 0):
         oracao_noite = """Oração da Noite - 09pm:\n
         Meu Deus e meu Senhor, obrigado por mais um dia de vida! Eu vos agrade- ço todo bem que me concedestes praticar, 
          e vos suplico perdão e miseri- córdia pelo mal que cometi, em pensamentos, palavras, obras e omissões. 
