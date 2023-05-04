@@ -12,14 +12,14 @@ from flask import jsonify
 
 # declarando variáveis
 chatid = os.getenv("chatid_group") # chatid dos grupos
-# chatid = os.getenv("chatid_bot") # chatid para testes (bot)
+# adcichatid = os.getenv("chatid_bot") # chatid para testes (bot)
 chatid_list = list(chatid.split(","))
 apiToken_telegram = os.getenv("token_tlg")
 apiToken_openai = os.getenv("token_openai")
 
 
 # declarando funções
-def send_telegram(message, chatid):
+def send_telegram(message, chatid, disable_web_page_preview=False):
     """Função que reaiza o envio de mensagem, utilizando a API Telegram
 
     Args:
@@ -28,30 +28,30 @@ def send_telegram(message, chatid):
     """
     
     apiURL = f'https://api.telegram.org/bot{apiToken_telegram}/sendMessage'
-
+    
     try:
-        requests.post(apiURL, json={'chat_id': chatid, 'text': message})
+        requests.post(apiURL, json={'chat_id': chatid, 'text': message, 'disable_web_page_preview': disable_web_page_preview})
     except Exception as e:
         print(e)
 
 
-# def send_telegram_img(ulr_img, chatid):
-#     """Função que realiza o envio de imagens, utilizando a API Telegram
-# 
-#     Args:
-#         ulr_img (str): URL da imagem a ser enviada
-#         chatid (str): ChatID do contato ou grupo desejado a receber a mensagem
-#     """
-# 
-#     apiURL = f'https://api.telegram.org/bot{apiToken_telegram}/sendPhoto'
-#     
-#     with open("img.jpg", "wb") as f:
-#         f.write(ulr_img)
-#         
-#     try:
-#         requests.post(apiURL, files={'photo': open("img.jpg", 'rb')}, data={'chat_id': chatid})
-#     except Exception as e:
-#         print(e)
+def send_telegram_img(ulr_img, chatid):
+    """Função que realiza o envio de imagens, utilizando a API Telegram
+
+    Args:
+        ulr_img (str): URL da imagem a ser enviada
+        chatid (str): ChatID do contato ou grupo desejado a receber a mensagem
+    """
+
+    apiURL = f'https://api.telegram.org/bot{apiToken_telegram}/sendPhoto'
+    
+    with open("img.jpg", "wb") as f:
+        f.write(ulr_img)
+        
+    try:
+        requests.post(apiURL, files={'photo': open("img.jpg", 'rb')}, data={'chat_id': chatid})
+    except Exception as e:
+        print(e)
 
 
 def search_youtube(palavra_chave: str):
@@ -225,26 +225,26 @@ def liturgia_diaria():
         # obtendo dados do santo do dia
         html_req = req_site("https://santo.cancaonova.com/")
         dados_html = BeautifulSoup(html_req.text, 'html.parser')
-        
+
         # obtendo nome do santo do dia
         nome_santo = dados_html.find('h1', class_='entry-title').text
         nome_santo_msg = nome_santo.split(",")[0]
         
         # enviando nome do santo do dia
-        send_telegram("Santo(a) do dia: {}".format(nome_santo), c)
+        send_telegram("""Santo(a) do dia: {}\nSaiba mais: https://santo.cancaonova.com""".format(nome_santo), c, True)
         
         # obtendo imagem do santo do dia
-        # url_img = dados_html.find('img', class_='wp-image-10488 size-full').get('src')
-        # url_img_santo = requests.get(url_img).content
-        
-        # enviando imagem do santo do dia
-        # send_telegram_img(url_img_santo, c)
+        url_img = dados_html.find_all('img')[1].get('src')
+        url_img_santo = requests.get(url_img).content
+    
+        send_telegram_img(url_img_santo, c)
+        send_telegram("""{}, Rogai por nós""".format(nome_santo_msg), chatid)
         
         # obtendo resumo do santo do dia por chatGPT
-        quem_foi = who_was(nome_santo_msg)
+        # quem_foi = who_was(nome_santo_msg)
         
         # enviando resumo do santo do dia
-        send_telegram("{}\n {}, rogai por nós!".format(quem_foi, nome_santo_msg), c)
+        # send_telegram("{}\n {}, rogai por nós!".format(quem_foi, nome_santo_msg), c)
     
     return jsonify(msg = "Liturgia enviada com sucesso!"), 200
 
