@@ -238,7 +238,7 @@ def liturgia_diaria():
         url_img_santo = requests.get(url_img).content
     
         send_telegram_img(url_img_santo, c)
-        send_telegram("""{}, Rogai por nós""".format(nome_santo_msg), chatid)
+        send_telegram("""{}, Rogai por nós""".format(nome_santo_msg), c)
         
         # obtendo resumo do santo do dia por chatGPT
         # quem_foi = who_was(nome_santo_msg)
