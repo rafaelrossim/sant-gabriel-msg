@@ -368,6 +368,32 @@ def liturgia_horas():
         """
         
     elif now_tmz >= datetime.time(12, 0) and now_tmz < datetime.time(15, 0):
+        
+        oracao_antes_refeicoes = """Oração antes das refeições:\n
+        Em nome do Pai +, do Filho e do Espírito Santo. Amém.
+         Este pão e esta união, abençoai, Senhor!
+         Abençoai, Senhor, a mesa deste lar, e na mesa do Céu guardai-nos um lugar!
+         Abençoai, Senhor, a nós e a esta comida, providenciai a quem não tem.
+         E fazei-nos servir-Vos fielmente, toda a vida. Amém.
+         Pai-Nosso, Ave-Maria, Glória ao Pai.\n\n
+        """
+        
+        oração_antes_refeicoes = oração_antes_refeicoes.replace("\n        ", "")
+        send_telegram(oracao_antes_refeicoes, os.getenv("chatid_bot")) # enviando mensagem para o bot teste
+        
+        oracao_depois_refeicoes = """Oração depois das refeições:\n
+        Em nome do Pai +, do Filho e do Espírito Santo. Amém.
+         Por este pão, por esta união, obrigado, Senhor!
+         Somos vossa Igreja doméstica! Senhor, conservai-a unida e feliz!!
+         Somos vossa família reunida, como sinal do vosso amor! Guardai-nos felizes e unidos!
+         Obrigado, Senhor, por esta refeição!
+         Ensinai-nos a repartir o pão com os mais pobres! Amém.
+         Pai-Nosso, Ave-Maria, Glória ao Pai.\n\n    
+        """
+        
+        oracao_depois_refeicoes = oracao_depois_refeicoes.replace("\n        ", "")
+        send_telegram(oracao_depois_refeicoes, os.getenv("chatid_bot")) # enviando mensagem para o bot teste
+        
         liturgia_horas = """Ofício da Imaculada Conceição (Sexta):\n
         Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor. 
          Glória seja ao Pai, ao Filho e ao Amor também, que é um só Deus em Pessoas três,
