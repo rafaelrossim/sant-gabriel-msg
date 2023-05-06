@@ -12,7 +12,7 @@ from flask import jsonify
 
 # declarando variáveis
 chatid = os.getenv("chatid_group") # chatid dos grupos
-# adcichatid = os.getenv("chatid_bot") # chatid para testes (bot)
+# chatid = os.getenv("chatid_bot") # chatid para testes (bot)
 chatid_list = list(chatid.split(","))
 apiToken_telegram = os.getenv("token_tlg")
 apiToken_openai = os.getenv("token_openai")
@@ -261,7 +261,8 @@ def liturgia_horas():
     
     # hora atual com timezone
     now_tmz = now.time()
-
+    
+    now_tmz = datetime.time(12, 0)
     # verificando a hora atual para enviar o ofício das horas
     if now_tmz >= datetime.time(3, 0) and now_tmz < datetime.time(6, 0):
         oracao_inicial = """Ofício da Imaculada Conceição:\n
@@ -368,22 +369,21 @@ def liturgia_horas():
         """
         
     elif now_tmz >= datetime.time(12, 0) and now_tmz < datetime.time(15, 0):
-        
         oracao_antes_refeicoes = """Oração antes das refeições:\n
-        Em nome do Pai +, do Filho e do Espírito Santo. Amém.
-         Este pão e esta união, abençoai, Senhor!
+        Em nome do Pai +, do Filho e do Espírito Santo. Amém.\n\n
+        Este pão e esta união, abençoai, Senhor!
          Abençoai, Senhor, a mesa deste lar, e na mesa do Céu guardai-nos um lugar!
          Abençoai, Senhor, a nós e a esta comida, providenciai a quem não tem.
          E fazei-nos servir-Vos fielmente, toda a vida. Amém.
          Pai-Nosso, Ave-Maria, Glória ao Pai.\n\n
         """
         
-        oração_antes_refeicoes = oração_antes_refeicoes.replace("\n        ", "")
+        oracao_antes_refeicoes = oracao_antes_refeicoes.replace("\n        ", "")
         send_telegram(oracao_antes_refeicoes, os.getenv("chatid_bot")) # enviando mensagem para o bot teste
         
         oracao_depois_refeicoes = """Oração depois das refeições:\n
-        Em nome do Pai +, do Filho e do Espírito Santo. Amém.
-         Por este pão, por esta união, obrigado, Senhor!
+        Em nome do Pai +, do Filho e do Espírito Santo. Amém.\n\n
+        Por este pão, por esta união, obrigado, Senhor!
          Somos vossa Igreja doméstica! Senhor, conservai-a unida e feliz!!
          Somos vossa família reunida, como sinal do vosso amor! Guardai-nos felizes e unidos!
          Obrigado, Senhor, por esta refeição!
