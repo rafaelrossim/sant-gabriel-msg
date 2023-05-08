@@ -548,7 +548,7 @@ def recados():
     
     # enviando mensagem para uma lista de grupos
     for c in chatid_list:
-        send_telegram(f"Reacados da paróquia:\n{data}", c)
+        send_telegram(f"Recados da paróquia:\n{data}", c)
     
     # retornando mensagem de envio
     return jsonify(msg = "Recados enviados com sucesso!"), 200
