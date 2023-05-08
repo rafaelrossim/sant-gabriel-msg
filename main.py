@@ -303,7 +303,7 @@ def liturgia_horas():
             ofercimento_dia = """Oferecimento do Dia:\n
             Ofereço-vos, ó meu Deus, em união com o Santíssimo Coração de Jesus e por meio do Imaculado Coração de Maria, 
             as orações, obras, sofrimentos e alegrias deste dia, em reparação de nossas ofensas 
-            e por todas as intenções pelas quais o Divino Coração está, continuamente, intercedendo em nosso favor.
+            e por todas as intenções pelas quais o Divino Coração está, continuamente, intercedendo em nosso favor. 
             Eu Vos ofereço, de modo particular, pelas intenções do nosso Santo Padre, o Papa e por toda a Igreja. Amém.\n\n"""
             
             # tratando strings para envio
