@@ -14,7 +14,7 @@ from flask import jsonify, request
 chatid = os.getenv("chatid_group") # chatid dos grupos
 # chatid = os.getenv("chatid_bot") # chatid para testes (bot)
 chatid_list = list(chatid.split(","))
-apiToken_telegram = os.getenv("token_tlg")
+apiToken_telegram = os.getenv("token_tlg_liturgia")
 apiToken_openai = os.getenv("token_openai")
 
 
