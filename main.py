@@ -529,11 +529,11 @@ def liturgia_horas():
             vades Vós adiante e na agonia, Vós nos animeis, ó doce Virgem Maria. Amém.   
             """
     
-    # tratando strings para envio
-    liturgia_horas = liturgia_horas.replace("\n         ", "")
-    liturgia_horas = liturgia_horas.replace("      ", "")
-    liturgia_horas = liturgia_horas.replace("   ", "")
-    send_telegram(liturgia_horas, c)
+        # tratando strings para envio
+        liturgia_horas = liturgia_horas.replace("\n         ", "")
+        liturgia_horas = liturgia_horas.replace("      ", "")
+        liturgia_horas = liturgia_horas.replace("   ", "")
+        send_telegram(liturgia_horas, c)
     
     # retornando a liturgia das horas
     return jsonify(msg = "Liturgia das horas enviada com sucesso!"), 200
