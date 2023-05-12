@@ -470,7 +470,7 @@ def liturgia_horas():
             
             Hino:\n
             Deus Vos salve, relógio, que, andando atrasado, serviu de sinal ao Verbo
-            Encarnado. Para que o homem suba às sumas alturas, desce Deus dos céus para as criaturas.
+            Encarnado. Para que o homem suba às sumas alturas, desce Deus dos céus para as criaturas. 
             Com os raios claros do Sol da Justiça, Resplandece a Virgem, dando ao sol cobiça.
             Sois lírio formoso, que cheiro respira, entre os espinhos da serpente a ira.
             Vós aquebrantais com Vosso poder os cegos errados Vós aluminais.
