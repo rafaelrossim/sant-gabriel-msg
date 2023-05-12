@@ -12,7 +12,7 @@ from flask import jsonify, request
 
 # declarando variáveis
 chatid = os.getenv("chatid_group_liturgia") # chatid dos grupos
-# chatid = os.getenv("chatid_bot_liturgia") # chatid para testes (bot)
+chatid = os.getenv("chatid_bot_liturgia") # chatid para testes (bot)
 chatid_list = list(chatid.split(","))
 apiToken_telegram = os.getenv("token_tlg_liturgia")
 apiToken_openai = os.getenv("token_openai")
@@ -197,27 +197,6 @@ def liturgia_diaria():
             c
         )
         
-        # obtendo data de hoje e converter a data em formato de dia da semana
-        data_hoje = datetime.datetime.now()
-        dia_da_semana = data_hoje.strftime("%A")
-        
-        # criando dict para fazer tradução da semana em português
-        dias_da_semana = {
-        "Monday": "segundafeira", 
-        "Tuesday": "tercafeira",
-        "Wednesday": "quartafeira", 
-        "Thursday": "quintafeira", 
-        "Friday": "sextafeira", 
-        "Saturday": "sabado", 
-        "Sunday": "domingo"
-        }
-        
-        # obtendo video do terço diário
-        video_yt_terco = search_youtube("terco+diario+frei+gilson+"+dias_da_semana[dia_da_semana])
-        
-        # enviando vídeo do terço diário
-        send_telegram("Terço de hoje:\n\n {}".format(video_yt_terco), c)
-        
         # obtendo dados do santo do dia
         html_req = req_site("https://santo.cancaonova.com/")
         dados_html = BeautifulSoup(html_req.text, 'html.parser')
@@ -326,6 +305,27 @@ def liturgia_horas():
             oracao_manha = oracao_manha.replace("   ", "")
             send_telegram(oracao_manha, c)
             
+            # obtendo data de hoje e converter a data em formato de dia da semana
+            data_hoje = datetime.datetime.now()
+            dia_da_semana = data_hoje.strftime("%A")
+            
+            # criando dict para fazer tradução da semana em português
+            dias_da_semana = {
+            "Monday": "segundafeira", 
+            "Tuesday": "tercafeira",
+            "Wednesday": "quartafeira", 
+            "Thursday": "quintafeira", 
+            "Friday": "sextafeira", 
+            "Saturday": "sabado", 
+            "Sunday": "domingo"
+            }
+            
+            # obtendo video do terço diário
+            video_yt_terco = search_youtube("terco+diario+frei+gilson+"+dias_da_semana[dia_da_semana])
+            
+            # enviando vídeo do terço diário
+            send_telegram("Terço de hoje:\n\n {}".format(video_yt_terco), c)
+                
             liturgia_horas = """Ofício da Imaculada Conceição (Prima):\n
             Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor. 
             Glória seja ao Pai, ao Filho e ao Amor também, que é um só Deus em Pessoas três, 
