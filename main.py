@@ -4,7 +4,7 @@
 
 
 # importando libs
-import requests, os, urllib.request, re, datetime, openai, pytz
+import requests, os, urllib.request, re, datetime, pytz
 from app import app
 from bs4 import BeautifulSoup
 from flask import jsonify, request
@@ -277,6 +277,7 @@ def liturgia_horas():
             mereça na outra vida alcançar o prêmio da bem-aventurança, pelo merecimento do Vosso bendito filho, 
             Jesus Cristo, Nosso Senhor, que com o Pai e o Espírito Santo vive e reina para sempre. Amém.\n\n
             """
+            send_telegram("Assista o Ofício da Imaculada Conceição (Matinas) 👇\n\nhttps://www.youtube.com/watch?v=zhAYIkD5xhI", c)
         
         elif now_tmz >= datetime.time(6, 0) and now_tmz < datetime.time(9, 0):
             ofercimento_dia = """Oferecimento do Dia:\n
@@ -349,6 +350,8 @@ def liturgia_horas():
             Jesus Cristo, Nosso Senhor, que com o Pai e o Espírito Santo vive e reina para sempre. Amém.\n\n
             """
             
+            send_telegram("Assista o Ofício da Imaculada Conceição (Prima) 👇\n\nhttps://www.youtube.com/watch?v=_t_1MA693WE", c)
+            
         elif now_tmz >= datetime.time(9, 0) and now_tmz < datetime.time(12, 0):
             liturgia_horas = """Ofício da Imaculada Conceição (Terça):\n
             Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor.
@@ -372,6 +375,8 @@ def liturgia_horas():
             mereça na outra vida alcançar o prêmio da bem-aventurança, pelo merecimento do Vosso bendito filho, 
             Jesus Cristo, Nosso Senhor, que com o Pai e o Espírito Santo vive e reina para sempre. Amém.\n\n
             """
+            
+            send_telegram("Assista o Ofício da Imaculada Conceição (Terça) 👇\n\nhttps://www.youtube.com/watch?v=EAcVI43BKvo", c)
             
         elif now_tmz >= datetime.time(12, 0) and now_tmz < datetime.time(15, 0):
             oracao_antes_refeicoes = """Oração antes das refeições:\n
@@ -428,6 +433,8 @@ def liturgia_horas():
             Jesus Cristo, Nosso Senhor, que com o Pai e o Espírito Santo vive e reina para sempre. Amém.\n\n
             """
             
+            send_telegram("Assista o Ofício da Imaculada Conceição (Sexta) 👇\n\nhttps://www.youtube.com/watch?v=YV1H_cwOJj4", c)
+            
             # obtendo video da homilia diária
             video_yt_homilia = search_youtube("homilia+diaria+padre+paulo+ricardo+hoje")
             send_telegram("Homilia de hoje:\n\n {}".format(video_yt_homilia), c)
@@ -439,7 +446,7 @@ def liturgia_horas():
             # enviando vídeo do terço da misericordia
             send_telegram("Terço da misericórdia:\n\n {}".format(video_yt_terco_misericordia), c)
             
-            liturgia_horas = """Ofício da Imaculada Conceição (Noa):\n
+            liturgia_horas = """Ofício da Imaculada Conceição (Nona):\n
             Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor. 
             Glória seja ao Pai, ao Filho e ao Amor também, que é um só Deus em Pessoas três, 
             agora e sempre, e sem fim. Amém.\n\n
@@ -461,6 +468,8 @@ def liturgia_horas():
             mereça na outra vida alcançar o prêmio da bem-aventurança, pelo merecimento do Vosso bendito filho, 
             Jesus Cristo, Nosso Senhor, que com o Pai e o Espírito Santo vive e reina para sempre. Amém.\n\n 
             """
+            
+            send_telegram("Assista o Ofício da Imaculada Conceição (Nona) 👇\n\nhttps://www.youtube.com/watch?v=Fcd87wtc8LE", c)
             
         elif now_tmz >= datetime.time(18, 0) and now_tmz < datetime.time(21, 0):
             liturgia_horas = """Ofício da Imaculada Conceição (Vesperas):\n
@@ -487,6 +496,8 @@ def liturgia_horas():
             pelo merececimento do Vosso bendito filho, Jesus Cristo, Nosso Senhor,
             que com Pai e o Espirito Santo vive e reina para sempre. Amém.\n\n
             """
+            
+            send_telegram("Assista o Ofício da Imaculada Conceição (Vesperas) 👇\n\nhttps://www.youtube.com/watch?v=a0hdBl_oKuE", c)
             
         elif now_tmz >= datetime.time(21, 0) and now_tmz < datetime.time(23, 0):
             oracao_noite = """Oração da Noite:\n
@@ -528,6 +539,9 @@ def liturgia_horas():
             Humildes oferecemos a Vós, Virgem Pia, estas orações, porque, em nossa guia, 
             vades Vós adiante e na agonia, Vós nos animeis, ó doce Virgem Maria. Amém.   
             """
+            
+            send_telegram("Assista o Ofício da Imaculada Conceição (Completas) 👇\n\nhttps://www.youtube.com/watch?v=JTOm6WU3Fbo", c)
+            send_telegram("Assista o Oferecimento do Ofício da Imaculada Conceição 👇\n\nhttps://www.youtube.com/watch?v=DgzV3caL-3o", c)
     
         # tratando strings para envio
         liturgia_horas = liturgia_horas.replace("\n         ", "")
@@ -545,6 +559,8 @@ def recados():
     
     # obtendo dados de texto
     data = request.get_data(as_text=True)
+    
+    data = data.lower()
     
     # enviando mensagem para uma lista de grupos
     for c in chatid_list:
