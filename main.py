@@ -8,6 +8,7 @@ import requests, os, urllib.request, re, datetime, pytz
 from app import app
 from bs4 import BeautifulSoup
 from flask import jsonify, request
+from extractor.ExtractorService import ExtractorService
 
 
 # declarando variáveis
@@ -90,112 +91,75 @@ def req_site(site):
     return resposta
 
 
-# def who_was(nome):
-#     """Função que realiza a busca no ChatGPT
-# 
-#     Args:
-#         nome(str): Nome do Santo(a) de Deus
-# 
-#     Returns:
-#         str: Código de resposta da requisição
-#     """
-#     
-#     openai.api_key = apiToken_openai
-# 
-#     response = openai.Completion.create(
-#         model="text-davinci-003",
-#         prompt="quem foi {}".format(nome),
-#         temperature=0.1,
-#         max_tokens=1000,
-#         top_p=1,
-#         frequency_penalty=0,
-#         presence_penalty=0
-#     )
-#     
-#     return response["choices"][0]["text"]
-
-
 @app.route('/liturgia_diaria/', methods=['GET'])
 def liturgia_diaria():
-    """Função que realiza query na API Liturgia Diária e envia mensagem para o Telegram
-    
+    """Função que realiza o envio da liturgia diária para os grupos do Telegram
+
     Returns:
-        json: Toda a liturgia diária
+        JSON: Mensagem de sucesso ou erro
     """
     
-    # declarando e solicitnado url da API
-    url = 'https://liturgia.up.railway.app/'
-    r = requests.get(url).json()
+    # Inicializando classe
+    liturgy = ExtractorService.getScrapy()
     
-    # ontendo dados gerais da lirurgia
-    json_data  = r['data']
-    json_liturgia  = r['liturgia']
-    json_cor = r['cor']
-    json_prefacio = r['dia']
+    # Obtendo dados da liturgia
+    data = str(liturgy['date'])
+    titulo_liturgia = str(liturgy['entry_title'])
+    cor = str(liturgy['color'])
     
-    # enviando mensagens para uma lista de grupos
+    # Obtendo dados da primeira leitura
+    titulo_primeira_leitura = str(liturgy['readings']['first_reading']['head']).replace(".", "")
+    passagem_primeira_leitura = str(liturgy['readings']['first_reading']['title']).split("Primeira Leitura ")[1]
+    primeira_leitura = str(liturgy['readings']['first_reading']['text']).replace(".", ". ")
+    resposta_primeira_leitura = str(liturgy['readings']['first_reading']['footer']+" "+str(liturgy['readings']['first_reading']['footer_response']))
+    
+    # Obtendo dados do salmo
+    passagem_salmo = str(liturgy['readings']['psalm']['title']).split("Responsório ")[1]
+    salmo = str(liturgy['readings']['psalm']['content_psalm']).replace("', '", "\n\n").replace("[", "").replace("]", "")
+    reposta_salmo = str(liturgy['readings']['psalm']['response']).replace(".", "")
+    
+    # Obtendo dados da segunda leitura caso exista
+    try:
+        titulo_segunda_leitura = str(liturgy['readings']['second_reading']['head']).replace(".", "")
+        passagem_segunda_leitura = str(liturgy['readings']['second_reading']['title']).split("Segunda Leitura ")[1]
+        segunda_leitura = str(liturgy['readings']['second_reading']['text']).replace(".", ". ")
+        resposta_segunda_leitura = str(liturgy['readings']['second_reading']['footer']+" "+str(liturgy['readings']['second_reading']['footer_response']))
+    # Caso não haja segunda leitura, define como None
+    except KeyError:
+        segunda_leitura = None
+        print(f"{str(liturgy['date'])}: Não há segunda leitura hoje!")
+    
+    # Obtendo dados do evangelho
+    titulo_evangelho = str(liturgy['readings']['gospel']['head_response'])
+    passagem_evangelho = str(liturgy['readings']['gospel']['title']).split("Evangelho ")[1]
+    evangelho = str(liturgy['readings']['gospel']['text']).replace(".", ". ")
+    resposta_evangelho = str(liturgy['readings']['gospel']['footer']+" "+str(liturgy['readings']['gospel']['footer_response']))
+    
+    # Obtendo dados da proclamação do evangelho
+    all_html = str(liturgy['readings']['gospel']['all_html'])
+    soup = BeautifulSoup(all_html, 'html.parser')
+    proclamacao_html = soup.find_all('p', align="justify")
+    
+    # Tratando dados da proclamação do evangelho
+    list_proclamacao = []
+    for p in proclamacao_html[:2]:
+        p = str(p.text).replace("\n", "").replace(" — ", "").replace("   +  ", " ✠ ").replace(".", "").lstrip().rstrip()
+        list_proclamacao.append(p)
+    
+    proclamacao = list_proclamacao[0]
+    
+    # enviando liturgia para os grupos do Telegram
     for c in chatid_list:
-        print("Enviando mensagem para o chatid {}".format(c))
+        send_telegram(f"Liturgia do dia: {data} - {titulo_liturgia}", c)
+        send_telegram(f"Cor: {cor}", c)
+        send_telegram(f"Primeira leitura:\n\n{titulo_primeira_leitura} {passagem_primeira_leitura}\n\n{primeira_leitura}\n\n{resposta_primeira_leitura}", c)
+        send_telegram(f"Salmo:\n\n{reposta_salmo} ({passagem_salmo})\n\n{salmo}", c)
         
-        # enviando dados gerais da liturgia
-        send_telegram(f"Liturgia do dia: {json_data} - {json_liturgia}" , c)
-        send_telegram(f"Cor: {json_cor}", c)
-        send_telegram(f"Antífona: {json_prefacio}", c)
+        # enviando segunda leitura caso exista
+        if segunda_leitura != None:
+            send_telegram(f"Segunda leitura:\n\n{titulo_segunda_leitura} {passagem_segunda_leitura}\n\n{segunda_leitura}\n\n{resposta_segunda_leitura}", c)
         
-        # obtendo primeira leitura
-        json_primeiraLeitura_titulo = r['primeiraLeitura']['titulo']
-        json_primeiraLeitura_texto = r['primeiraLeitura']['texto']
-        json_primeiraLeitura_referencia = r['primeiraLeitura']['referencia']
-        
-        # enviando dados da primeira leitura
-        send_telegram("Primeira leitura:\n\n {} ({})\n\n {}\n\n Palavra do Senhor. Graças a Deus.".format(
-            json_primeiraLeitura_titulo, 
-            json_primeiraLeitura_referencia, 
-            json_primeiraLeitura_texto), 
-            c
-        )    
-        
-        # obtendo salmo
-        json_salmo_refrao = r['salmo']['refrao']
-        json_salmo_texto = r['salmo']['texto']
-        json_salmo_referencia = r['salmo']['referencia']
-        
-        # enviando dados de salmo
-        send_telegram("Salmo:\n\n {} ({})\n\n {}\n\n".format(
-            json_salmo_refrao, 
-            json_salmo_referencia, 
-            json_salmo_texto), 
-            c
-        )
-        
-        # verificando se existe segunda leitura
-        if r['segundaLeitura'] != "Não há segunda leitura hoje!":
-            
-            # caso positivo, obtendo dados da segunda leitura
-            json_segundaLeitura_titulo = r['segundaLeitura']['titulo']
-            json_segundaLeitura_texto = r['segundaLeitura']['texto']
-            json_segundaLeitura_referencia = r['segundaLeitura']['referencia']
-            
-            # enviando dados da segunda leitura
-            send_telegram("Segunda leitura:\n\n {} ({})\n\n {}\n\n Palavra do Senhor. Graças a Deus.".format(
-                json_segundaLeitura_titulo, 
-                json_segundaLeitura_referencia, 
-                json_segundaLeitura_texto), 
-                c
-            )
-        
-        # obtendo evangelho
-        json_evangelho_titulo = r['evangelho']['titulo']
-        json_evangelho_texto = r['evangelho']['texto']
-        json_evangelho_referencia = r['evangelho']['referencia']
-        
-        # enviando dados do evangelho
-        send_telegram("Evangelho:\n\n {} ({})\n\n {}\n\n Palavra da Salvação. Glória a vós, Senhor.".format(
-            json_evangelho_titulo, 
-            json_evangelho_referencia, 
-            json_evangelho_texto), 
-            c
-        )
+        send_telegram(f"Evangelho:\n\n{proclamacao}\n{passagem_evangelho}\n\n{titulo_evangelho}\n\n{evangelho}\n\n{resposta_evangelho}", c)
         
         # obtendo dados do santo do dia
         html_req = req_site("https://santo.cancaonova.com/")
@@ -215,10 +179,7 @@ def liturgia_diaria():
         # enviado imagem do santo do dia
         send_telegram_img(url_img_santo, c)
         send_telegram("""{}, Rogai por nós""".format(nome_santo_msg), c)
-        
-        # obtendo resumo do santo do dia por chatGPT
-        # quem_foi = who_was(nome_santo_msg)
-    
+     
     return jsonify(msg = "Liturgia enviada com sucesso!"), 200
 
 
