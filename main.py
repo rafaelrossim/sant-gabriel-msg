@@ -114,7 +114,10 @@ def liturgia_diaria():
     resposta_primeira_leitura = str(liturgy['readings']['first_reading']['footer']+" "+str(liturgy['readings']['first_reading']['footer_response']))
     
     # Obtendo dados do salmo
-    passagem_salmo = str(liturgy['readings']['psalm']['title']).split("Responsório ")[1]
+    try:
+        passagem_salmo = str(liturgy['readings']['psalm']['title']).split("Responsório ")[1]
+    except IndexError:
+        passagem_salmo = str(liturgy['readings']['psalm']['title']).split("Responsório ")[0]
     salmo = str(liturgy['readings']['psalm']['content_psalm']).replace("', '", "\n\n").replace("[", "").replace("]", "")
     reposta_salmo = str(liturgy['readings']['psalm']['response']).replace(".", "")
     
