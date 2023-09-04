@@ -286,10 +286,10 @@ def liturgia_horas():
             }
             
             # obtendo video do terço diário
-            video_yt_terco = search_youtube("terco+diario+frei+gilson+"+dias_da_semana[dia_da_semana])
+            # video_yt_terco = search_youtube("terco+diario+frei+gilson+"+dias_da_semana[dia_da_semana])
             
             # enviando vídeo do terço diário
-            send_telegram("Terço de hoje:\n\n {}".format(video_yt_terco), c)
+            # send_telegram("Terço de hoje:\n\n {}".format(video_yt_terco), c)
                 
             liturgia_horas = """Ofício da Imaculada Conceição (Prima):\n
             Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor. 
@@ -400,15 +400,15 @@ def liturgia_horas():
             send_telegram("Assista o Ofício da Imaculada Conceição (Sexta) 👇\n\nhttps://www.youtube.com/watch?v=YV1H_cwOJj4", c)
             
             # obtendo video da homilia diária
-            video_yt_homilia = search_youtube("homilia+diaria+padre+paulo+ricardo+hoje")
-            send_telegram("Homilia de hoje:\n\n {}".format(video_yt_homilia), c)
+            # video_yt_homilia = search_youtube("homilia+diaria+padre+paulo+ricardo+hoje")
+            # send_telegram("Homilia de hoje:\n\n {}".format(video_yt_homilia), c)
             
         elif now_tmz >= datetime.time(15, 0) and now_tmz < datetime.time(18, 0):
             # obtendo video do terço da misericordia
-            video_yt_terco_misericordia = search_youtube("terco+da+misericordia+Instituto+Hesed")
+            # video_yt_terco_misericordia = search_youtube("terco+da+misericordia+Instituto+Hesed")
             
             # enviando vídeo do terço da misericordia
-            send_telegram("Terço da misericórdia:\n\n {}".format(video_yt_terco_misericordia), c)
+            # send_telegram("Terço da misericórdia:\n\n {}".format(video_yt_terco_misericordia), c)
             
             liturgia_horas = """Ofício da Imaculada Conceição (Nona):\n
             Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor. 
