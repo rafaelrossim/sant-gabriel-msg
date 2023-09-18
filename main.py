@@ -68,7 +68,7 @@ def search_youtube(palavra_chave: str):
     search_keyword = palavra_chave
     html = urllib.request.urlopen("https://www.youtube.com/results?search_query=" + search_keyword)
     video_ids = re.findall(r"watch\?v=(\S{11})", html.read().decode())
-    video_url = f"https://www.youtube.com/watch?v={video_ids[0]}"
+    video_url = f"https://www.youtube.com/watch?v={video_ids[1]}"
     
     return video_url
 
@@ -93,76 +93,85 @@ def req_site(site):
 
 @app.route('/liturgia_diaria/', methods=['GET'])
 def liturgia_diaria():
-    """Função que realiza o envio da liturgia diária para os grupos do Telegram
-
+    """Função que realiza query na API Liturgia Diária e envia mensagem para o Telegram
+    
     Returns:
-        JSON: Mensagem de sucesso ou erro
+        json: Toda a liturgia diária
     """
     
-    # Inicializando classe
-    liturgy = ExtractorService.getScrapy()
+    # declarando e solicitnado url da API
+    url = 'https://liturgia.up.railway.app/'
+    r = requests.get(url).json()
     
-    # Obtendo dados da liturgia
-    data = str(liturgy['date'])
-    titulo_liturgia = str(liturgy['entry_title'])
-    cor = str(liturgy['color'])
+    # ontendo dados gerais da lirurgia
+    json_data  = r['data']
+    json_liturgia  = r['liturgia']
+    json_cor = r['cor']
+    json_prefacio = r['dia']
     
-    # Obtendo dados da primeira leitura
-    titulo_primeira_leitura = str(liturgy['readings']['first_reading']['head']).replace(".", "")
-    passagem_primeira_leitura = str(liturgy['readings']['first_reading']['title']).split("Primeira Leitura ")[1]
-    primeira_leitura = str(liturgy['readings']['first_reading']['text']).replace(".", ". ")
-    resposta_primeira_leitura = str(liturgy['readings']['first_reading']['footer']+" "+str(liturgy['readings']['first_reading']['footer_response']))
-    
-    # Obtendo dados do salmo
-    try:
-        passagem_salmo = str(liturgy['readings']['psalm']['title']).split("Responsório ")[1]
-    except IndexError:
-        passagem_salmo = str(liturgy['readings']['psalm']['title']).split("Responsório ")[0]
-    salmo = str(liturgy['readings']['psalm']['content_psalm']).replace("', '", "\n\n").replace("[", "").replace("]", "")
-    reposta_salmo = str(liturgy['readings']['psalm']['response']).replace(".", "")
-    
-    # Obtendo dados da segunda leitura caso exista
-    try:
-        titulo_segunda_leitura = str(liturgy['readings']['second_reading']['head']).replace(".", "")
-        passagem_segunda_leitura = str(liturgy['readings']['second_reading']['title']).split("Segunda Leitura ")[1]
-        segunda_leitura = str(liturgy['readings']['second_reading']['text']).replace(".", ". ")
-        resposta_segunda_leitura = str(liturgy['readings']['second_reading']['footer']+" "+str(liturgy['readings']['second_reading']['footer_response']))
-    # Caso não haja segunda leitura, define como None
-    except KeyError:
-        segunda_leitura = None
-        print(f"{str(liturgy['date'])}: Não há segunda leitura hoje!")
-    
-    # Obtendo dados do evangelho
-    titulo_evangelho = str(liturgy['readings']['gospel']['head_response'])
-    passagem_evangelho = str(liturgy['readings']['gospel']['title']).split("Evangelho ")[1]
-    evangelho = str(liturgy['readings']['gospel']['text']).replace(".", ". ")
-    resposta_evangelho = str(liturgy['readings']['gospel']['footer']+" "+str(liturgy['readings']['gospel']['footer_response']))
-    
-    # Obtendo dados da proclamação do evangelho
-    all_html = str(liturgy['readings']['gospel']['all_html'])
-    soup = BeautifulSoup(all_html, 'html.parser')
-    proclamacao_html = soup.find_all('p', align="justify")
-    
-    # Tratando dados da proclamação do evangelho
-    list_proclamacao = []
-    for p in proclamacao_html[:2]:
-        p = str(p.text).replace("\n", "").replace(" — ", "").replace("   +  ", " ✠ ").replace(".", "").lstrip().rstrip()
-        list_proclamacao.append(p)
-    
-    proclamacao = list_proclamacao[0]
-    
-    # enviando liturgia para os grupos do Telegram
+    # enviando mensagens para uma lista de grupos
     for c in chatid_list:
-        send_telegram(f"Liturgia do dia: {data} - {titulo_liturgia}", c)
-        send_telegram(f"Cor: {cor}", c)
-        send_telegram(f"Primeira leitura:\n\n{titulo_primeira_leitura} {passagem_primeira_leitura}\n\n{primeira_leitura}\n\n{resposta_primeira_leitura}", c)
-        send_telegram(f"Salmo:\n\n{reposta_salmo} ({passagem_salmo})\n\n{salmo}", c)
+        print("Enviando mensagem para o chatid {}".format(c))
         
-        # enviando segunda leitura caso exista
-        if segunda_leitura != None:
-            send_telegram(f"Segunda leitura:\n\n{titulo_segunda_leitura} {passagem_segunda_leitura}\n\n{segunda_leitura}\n\n{resposta_segunda_leitura}", c)
+        # enviando dados gerais da liturgia
+        send_telegram(f"Liturgia do dia: {json_data} - {json_liturgia}" , c)
+        send_telegram(f"Cor: {json_cor}", c)
+        send_telegram(f"Antífona: {json_prefacio}", c)
         
-        send_telegram(f"Evangelho:\n\n{proclamacao}\n{passagem_evangelho}\n\n{titulo_evangelho}\n\n{evangelho}\n\n{resposta_evangelho}", c)
+        # obtendo primeira leitura
+        json_primeiraLeitura_titulo = r['primeiraLeitura']['titulo']
+        json_primeiraLeitura_texto = r['primeiraLeitura']['texto']
+        json_primeiraLeitura_referencia = r['primeiraLeitura']['referencia']
+        
+        # enviando dados da primeira leitura
+        send_telegram("Primeira leitura:\n\n {} ({})\n\n {}\n\n Palavra do Senhor. Graças a Deus.".format(
+            json_primeiraLeitura_titulo, 
+            json_primeiraLeitura_referencia, 
+            json_primeiraLeitura_texto), 
+            c
+        )    
+        
+        # obtendo salmo
+        json_salmo_refrao = r['salmo']['refrao']
+        json_salmo_texto = r['salmo']['texto']
+        json_salmo_referencia = r['salmo']['referencia']
+        
+        # enviando dados de salmo
+        send_telegram("Salmo:\n\n {} ({})\n\n {}\n\n".format(
+            json_salmo_refrao, 
+            json_salmo_referencia, 
+            json_salmo_texto), 
+            c
+        )
+        
+        # verificando se existe segunda leitura
+        if r['segundaLeitura'] != "Não há segunda leitura hoje!":
+            
+            # caso positivo, obtendo dados da segunda leitura
+            json_segundaLeitura_titulo = r['segundaLeitura']['titulo']
+            json_segundaLeitura_texto = r['segundaLeitura']['texto']
+            json_segundaLeitura_referencia = r['segundaLeitura']['referencia']
+            
+            # enviando dados da segunda leitura
+            send_telegram("Segunda leitura:\n\n {} ({})\n\n {}\n\n Palavra do Senhor. Graças a Deus.".format(
+                json_segundaLeitura_titulo, 
+                json_segundaLeitura_referencia, 
+                json_segundaLeitura_texto), 
+                c
+            )
+        
+        # obtendo evangelho
+        json_evangelho_titulo = r['evangelho']['titulo']
+        json_evangelho_texto = r['evangelho']['texto']
+        json_evangelho_referencia = r['evangelho']['referencia']
+        
+        # enviando dados do evangelho
+        send_telegram("Evangelho:\n\n {} ({})\n\n {}\n\n Palavra da Salvação. Glória a vós, Senhor.".format(
+            json_evangelho_titulo, 
+            json_evangelho_referencia, 
+            json_evangelho_texto), 
+            c
+        )
         
         # obtendo dados do santo do dia
         html_req = req_site("https://santo.cancaonova.com/")
@@ -182,7 +191,7 @@ def liturgia_diaria():
         # enviado imagem do santo do dia
         send_telegram_img(url_img_santo, c)
         send_telegram("""{}, Rogai por nós""".format(nome_santo_msg), c)
-     
+        
     return jsonify(msg = "Liturgia enviada com sucesso!"), 200
 
 
@@ -286,10 +295,10 @@ def liturgia_horas():
             }
             
             # obtendo video do terço diário
-            # video_yt_terco = search_youtube("terco+diario+frei+gilson+"+dias_da_semana[dia_da_semana])
+            video_yt_terco = search_youtube("terco+frei+gilson+"+dias_da_semana[dia_da_semana])
             
             # enviando vídeo do terço diário
-            # send_telegram("Terço de hoje:\n\n {}".format(video_yt_terco), c)
+            send_telegram("Terço de hoje:\n\n {}".format(video_yt_terco), c)
                 
             liturgia_horas = """Ofício da Imaculada Conceição (Prima):\n
             Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor. 
@@ -400,15 +409,15 @@ def liturgia_horas():
             send_telegram("Assista o Ofício da Imaculada Conceição (Sexta) 👇\n\nhttps://www.youtube.com/watch?v=YV1H_cwOJj4", c)
             
             # obtendo video da homilia diária
-            # video_yt_homilia = search_youtube("homilia+diaria+padre+paulo+ricardo+hoje")
-            # send_telegram("Homilia de hoje:\n\n {}".format(video_yt_homilia), c)
+            video_yt_homilia = search_youtube("homilia+diaria+padre+paulo+ricardo+hoje")
+            send_telegram("Homilia de hoje:\n\n {}".format(video_yt_homilia), c)
             
         elif now_tmz >= datetime.time(15, 0) and now_tmz < datetime.time(18, 0):
             # obtendo video do terço da misericordia
-            # video_yt_terco_misericordia = search_youtube("terco+da+misericordia+Instituto+Hesed")
+            video_yt_terco_misericordia = search_youtube("terco+da+misericordia+Instituto+Hesed")
             
             # enviando vídeo do terço da misericordia
-            # send_telegram("Terço da misericórdia:\n\n {}".format(video_yt_terco_misericordia), c)
+            send_telegram("Terço da misericórdia:\n\n {}".format(video_yt_terco_misericordia), c)
             
             liturgia_horas = """Ofício da Imaculada Conceição (Nona):\n
             Sede em meu favor, Virgem soberana, livrai-me do inimigo com o Vosso valor. 
