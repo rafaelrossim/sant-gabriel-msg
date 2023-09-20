@@ -55,11 +55,12 @@ def send_telegram_img(ulr_img, chatid):
         print(e)
 
 
-def search_youtube(palavra_chave: str):
+def search_youtube(palavra_chave: str, index_video: int = 1):
     """Função que realiza uma pesquisa no Youtube
 
     Args:
         palavra_chave (str): Palavra chave para pesquisa
+        index_video (int, optional): Index do vídeo a ser retornado. Defaults to 1.
 
     Returns:
         url: URL do vídeo encontrado
@@ -68,7 +69,7 @@ def search_youtube(palavra_chave: str):
     search_keyword = palavra_chave
     html = urllib.request.urlopen("https://www.youtube.com/results?search_query=" + search_keyword)
     video_ids = re.findall(r"watch\?v=(\S{11})", html.read().decode())
-    video_url = f"https://www.youtube.com/watch?v={video_ids[1]}"
+    video_url = f"https://www.youtube.com/watch?v={video_ids[index_video]}"
     
     return video_url
 
@@ -409,7 +410,7 @@ def liturgia_horas():
             send_telegram("Assista o Ofício da Imaculada Conceição (Sexta) 👇\n\nhttps://www.youtube.com/watch?v=YV1H_cwOJj4", c)
             
             # obtendo video da homilia diária
-            video_yt_homilia = search_youtube("homilia+diaria+padre+paulo+ricardo+hoje")
+            video_yt_homilia = search_youtube("homilia+diaria+padre+paulo+ricardo+hoje", 1)
             send_telegram("Homilia de hoje:\n\n {}".format(video_yt_homilia), c)
             
         elif now_tmz >= datetime.time(15, 0) and now_tmz < datetime.time(18, 0):
