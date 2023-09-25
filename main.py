@@ -409,9 +409,9 @@ def liturgia_horas():
             
             send_telegram("Assista o Ofício da Imaculada Conceição (Sexta) 👇\n\nhttps://www.youtube.com/watch?v=YV1H_cwOJj4", c)
             
-            # obtendo video da homilia diária
-            video_yt_homilia = search_youtube("homilia+diaria+padre+paulo+ricardo+hoje", 1)
-            send_telegram("Homilia de hoje:\n\n {}".format(video_yt_homilia), c)
+            # # obtendo video da homilia diária
+            # video_yt_homilia = search_youtube("homilia+diaria+padre+paulo+ricardo+hoje", 1)
+            # send_telegram("Homilia de hoje:\n\n {}".format(video_yt_homilia), c)
             
         elif now_tmz >= datetime.time(15, 0) and now_tmz < datetime.time(18, 0):
             # obtendo video do terço da misericordia
