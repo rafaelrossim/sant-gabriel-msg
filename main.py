@@ -14,7 +14,6 @@ from flask import jsonify, request
 chatid = os.getenv("chatid_bot_liturgia") # chatid para testes (bot)
 chatid_list = list(chatid.split(","))
 apiToken_telegram = os.getenv("token_tlg_liturgia")
-apiToken_openai = os.getenv("token_openai")
 
 # declarando funções
 def send_telegram(message, chatid, disable_web_page_preview=False):
