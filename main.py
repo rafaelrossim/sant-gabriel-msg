@@ -1,23 +1,20 @@
 # Docs TelegramAPI
 # https://core.telegram.org/bots
 # https://api.telegram.org/bot{token_telegram}/getUpdates
-
+# https://github.com/Dancrf/liturgia-diaria
 
 # importando libs
 import requests, os, urllib.request, re, datetime, pytz
 from app import app
 from bs4 import BeautifulSoup
 from flask import jsonify, request
-from extractor.ExtractorService import ExtractorService
-
 
 # declarando variáveis
-chatid = os.getenv("chatid_group_liturgia") # chatid dos grupos
-# chatid = os.getenv("chatid_bot_liturgia") # chatid para testes (bot)
+# chatid = os.getenv("chatid_group_liturgia") # chatid dos grupos
+chatid = os.getenv("chatid_bot_liturgia") # chatid para testes (bot)
 chatid_list = list(chatid.split(","))
 apiToken_telegram = os.getenv("token_tlg_liturgia")
 apiToken_openai = os.getenv("token_openai")
-
 
 # declarando funções
 def send_telegram(message, chatid, disable_web_page_preview=False):
@@ -34,7 +31,6 @@ def send_telegram(message, chatid, disable_web_page_preview=False):
         requests.post(apiURL, json={'chat_id': chatid, 'text': message, 'disable_web_page_preview': disable_web_page_preview})
     except Exception as e:
         print(e)
-
 
 def send_telegram_img(ulr_img, chatid):
     """Função que realiza o envio de imagens, utilizando a API Telegram
@@ -54,7 +50,6 @@ def send_telegram_img(ulr_img, chatid):
     except Exception as e:
         print(e)
 
-
 def search_youtube(palavra_chave: str, index_video: int = 1):
     """Função que realiza uma pesquisa no Youtube
 
@@ -73,7 +68,6 @@ def search_youtube(palavra_chave: str, index_video: int = 1):
     
     return video_url
 
-
 def req_site(site):
     """Função que realiza o webscrapping da pagina em questão
 
@@ -90,7 +84,6 @@ def req_site(site):
     print("Obtendo dados do site {}, {}\n".format(site, resp_code))
     
     return resposta
-
 
 @app.route('/liturgia_diaria/', methods=['GET'])
 def liturgia_diaria():
@@ -126,7 +119,7 @@ def liturgia_diaria():
         
         # enviando dados da primeira leitura
         send_telegram("Primeira leitura:\n\n {} ({})\n\n {}\n\n Palavra do Senhor. Graças a Deus.".format(
-            json_primeiraLeitura_titulo, 
+            json_primeiraLeitura_titulo,
             json_primeiraLeitura_referencia, 
             json_primeiraLeitura_texto), 
             c
@@ -194,7 +187,6 @@ def liturgia_diaria():
         send_telegram("""{}, Rogai por nós""".format(nome_santo_msg), c)
         
     return jsonify(msg = "Liturgia enviada com sucesso!"), 200
-
 
 @app.route('/liturgia_horas/', methods=['GET'])
 def liturgia_horas():
@@ -526,7 +518,6 @@ def liturgia_horas():
     # retornando a liturgia das horas
     return jsonify(msg = "Liturgia das horas enviada com sucesso!"), 200
 
-
 @app.route('/recados/', methods=['POST'])
 def recados():
     """Função que realiza o envio de recados para os grupos do telegram"""
@@ -542,7 +533,6 @@ def recados():
     
     # retornando mensagem de envio
     return jsonify(msg = "Recados enviados com sucesso!"), 200
-
 
 # execução de script
 if __name__ == "__main__":
