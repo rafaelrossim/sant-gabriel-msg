@@ -93,7 +93,7 @@ def liturgia_diaria():
     """
     
     # declarando e solicitnado url da API
-    url = 'https://liturgia.up.railway.app/'
+    url = 'https://liturgiadiaria.site/'
     r = requests.get(url).json()
     
     # ontendo dados gerais da lirurgia
